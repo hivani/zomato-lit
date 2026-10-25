@@ -79,7 +79,7 @@ export default function ReviewPage() {
   if (loadError) {
     return (
       <main className="mx-auto flex min-h-[70vh] w-full max-w-[560px] flex-col justify-center px-6">
-        <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-accent">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">
           Not found
         </p>
         <h1 className="mt-3 text-[1.75rem] font-semibold leading-snug tracking-[-0.02em]">
@@ -88,7 +88,7 @@ export default function ReviewPage() {
         <div className="mt-8">
           <Link
             href="/"
-            className="inline-flex h-11 items-center rounded-lg border border-ink/15 px-5 text-sm font-medium transition-colors hover:border-ink/30 hover:bg-ink/[0.03]"
+            className="inline-flex h-11 items-center rounded-lg border border-ink/20 px-5 text-sm font-medium transition-colors hover:border-ink/40 hover:bg-ink/[0.04]"
           >
             Go back
           </Link>
@@ -99,21 +99,26 @@ export default function ReviewPage() {
 
   return (
     <main className="mx-auto w-full max-w-[560px] px-6 py-12 sm:py-16">
-      <header className="border-b border-line pb-8">
-        <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
+      {/* Section 1 — what you are reviewing. */}
+      <header className="pb-8">
+        <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted">
           Write a review
         </p>
-        <h1 className="mt-3 text-balance text-[1.75rem] font-semibold leading-[1.15] tracking-[-0.02em] sm:text-[2.1rem]">
+        <h1 className="mt-2 text-balance text-[1.75rem] font-semibold leading-[1.12] tracking-[-0.02em] text-accent sm:text-[2.1rem]">
           {name ?? "\u00A0"}
         </h1>
       </header>
 
-      <form onSubmit={handleSubmit} className="mt-10">
+      {/* Section 2 — the form, on white so it reads as one task. */}
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-xl border border-line bg-card px-6 py-7"
+      >
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent">
             Your rating
           </span>
-          <span className="text-xs text-muted">
+          <span className="text-xs font-medium text-muted">
             {rating > 0 ? `${rating} of 5` : ""}
           </span>
         </div>
@@ -139,7 +144,7 @@ export default function ReviewPage() {
               >
                 <svg
                   viewBox="0 0 24 24"
-                  className={`h-10 w-10 ${filled ? "text-accent" : "text-ink/20"}`}
+                  className={`h-10 w-10 ${filled ? "text-accent" : "text-ink/25"}`}
                   aria-hidden="true"
                   fill={filled ? "currentColor" : "none"}
                   stroke="currentColor"
@@ -155,7 +160,7 @@ export default function ReviewPage() {
 
         <label
           htmlFor="comment"
-          className="mt-10 block text-[10px] font-medium uppercase tracking-[0.18em] text-muted"
+          className="mt-10 block text-[10px] font-semibold uppercase tracking-[0.18em] text-accent"
         >
           Your review
         </label>
@@ -165,13 +170,13 @@ export default function ReviewPage() {
           value={comment}
           onChange={(event) => setComment(event.target.value)}
           placeholder="What did you eat, and how was it?"
-          className="mt-3 min-h-32 w-full resize-none rounded-xl border border-line bg-card px-4 py-3.5 text-[15px] leading-relaxed placeholder:text-muted/60 focus:border-ink/25 focus:outline-none focus:ring-4 focus:ring-ink/[0.04]"
+          className="mt-3 min-h-32 w-full resize-none rounded-lg border border-line bg-paper px-4 py-3.5 text-[15px] leading-relaxed text-ink placeholder:text-muted/70 focus:border-ink/30 focus:outline-none focus:ring-4 focus:ring-ink/[0.05]"
         />
 
         {error && (
           <p
             role="alert"
-            className="mt-5 rounded-lg border border-accent/20 bg-accent/[0.04] px-4 py-3 text-sm leading-relaxed text-accent"
+            className="mt-5 rounded-lg border border-accent/25 bg-accent/[0.06] px-4 py-3 text-sm leading-relaxed text-accent"
           >
             {error}
           </p>
@@ -180,7 +185,7 @@ export default function ReviewPage() {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-7 h-12 w-full rounded-lg bg-ink text-sm font-medium text-paper transition-colors hover:bg-[#26261f] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-ink"
+          className="mt-7 h-12 w-full rounded-lg bg-ink text-sm font-medium text-paper transition-colors hover:bg-[#2c2a22] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:bg-ink"
         >
           {submitting ? "Submitting…" : "Submit review"}
         </button>

@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
-/* The whole palette. Off-white paper, near-black ink, one warm accent. */
+/* Four surfaces, in order of depth: paper (page) → sand (feature band) → card
+   (white, for things you read closely). Text has three weights: ink, muted,
+   and the single accent. Everything below was chosen for contrast first. */
 @theme {
-  --color-paper: #f7f5f1;
-  --color-card: #fffdfa;
-  --color-ink: #1a1a18;
-  --color-muted: #706d66;
-  --color-line: #e5e0d7;
-  --color-accent: #a9502c;
+  --color-paper: #f5f1e8;
+  --color-sand: #ebe4d6;
+  --color-card: #ffffff;
+  --color-ink: #16150f;
+  --color-muted: #57534a;
+  --color-line: #ded6c7;
+  --color-accent: #8f3d1e;
 }
 
 /* The Geist variable is set on <body> by next/font, so it must be read here
@@ -21,5 +24,5 @@ body {
 }
 
 ::selection {
-  background-color: color-mix(in oklab, var(--color-accent) 16%, transparent);
+  background-color: color-mix(in oklab, var(--color-accent) 18%, transparent);
 }
