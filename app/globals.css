@@ -10,9 +10,16 @@
   --color-accent: #a9502c;
 }
 
+/* The Geist variable is set on <body> by next/font, so it must be read here
+   rather than through a --font-sans token defined on :root. */
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-accent) 16%, transparent);
 }

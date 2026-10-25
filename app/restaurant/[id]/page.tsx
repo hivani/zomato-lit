@@ -29,18 +29,6 @@ function formatDate(iso: string) {
   });
 }
 
-function ReviewBody({ review }: { review: Review }) {
-  return (
-    <>
-      <div className="flex items-center justify-between gap-4">
-        <Stars rating={review.rating} />
-        <span className="text-xs text-muted">{formatDate(review.createdAt)}</span>
-      </div>
-      <p className="mt-3 text-[15px] leading-relaxed">{review.comment}</p>
-    </>
-  );
-}
-
 export default function RestaurantPage() {
   const { id } = useParams<{ id: string }>();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
@@ -71,22 +59,34 @@ export default function RestaurantPage() {
 
   if (error) {
     return (
-      <main className="mx-auto w-full max-w-[560px] px-6 py-16">
-        <p className="text-sm text-accent">{error}</p>
-        <Link
-          href="/"
-          className="mt-6 inline-block text-sm text-muted underline underline-offset-4"
-        >
-          Go back
-        </Link>
+      <main className="mx-auto flex min-h-[70vh] w-full max-w-[560px] flex-col justify-center px-6">
+        <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-accent">
+          Not found
+        </p>
+        <h1 className="mt-3 text-[1.75rem] font-semibold leading-snug tracking-[-0.02em]">
+          {error}
+        </h1>
+        <div className="mt-8">
+          <Link
+            href="/"
+            className="inline-flex h-11 items-center rounded-lg border border-ink/15 px-5 text-sm font-medium transition-colors hover:border-ink/30 hover:bg-ink/[0.03]"
+          >
+            Go back
+          </Link>
+        </div>
       </main>
     );
   }
 
   if (!restaurant) {
     return (
-      <main className="mx-auto w-full max-w-[560px] px-6 py-16">
-        <p className="text-sm text-muted">Loading…</p>
+      <main className="mx-auto w-full max-w-[560px] px-6 py-12 sm:py-16">
+        <div className="animate-pulse space-y-3">
+          <div className="h-9 w-3/4 rounded bg-ink/[0.07]" />
+          <div className="h-4 w-1/3 rounded bg-ink/[0.05]" />
+        </div>
+        <div className="mt-12 h-16 w-36 animate-pulse rounded bg-ink/[0.07]" />
+        <div className="mt-12 h-36 animate-pulse rounded-xl bg-ink/[0.04]" />
       </main>
     );
   }
@@ -94,75 +94,88 @@ export default function RestaurantPage() {
   const hasReviews = restaurant.totalReviews > 0;
 
   return (
-    <main className="mx-auto w-full max-w-[560px] px-6 py-14 sm:py-20">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+    <main className="mx-auto w-full max-w-[560px] px-6 py-12 sm:py-16">
+      <header className="border-b border-line pb-8">
+        <h1 className="text-balance text-[2rem] font-semibold leading-[1.1] tracking-[-0.025em] sm:text-[2.5rem]">
           {restaurant.name}
         </h1>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-muted">
           {restaurant.cuisine} · {restaurant.area}
         </p>
       </header>
 
-      <section className="mt-10">
-        {hasReviews ? (
-          <div className="flex items-end gap-3">
-            {/*
-              This is the line. The average is printed exactly as the API sent
-              it. There is no addition, division, rounding or sorting in this
-              file - only this variable being placed on the screen.
-            */}
-            <span className="text-7xl font-semibold leading-none tracking-tighter">
-              {restaurant.averageRating}
-            </span>
-            <span className="pb-1.5 text-sm text-muted">
-              {restaurant.totalReviews}{" "}
-              {restaurant.totalReviews === 1 ? "review" : "reviews"}
-            </span>
-          </div>
-        ) : (
-          <p className="text-sm text-muted">No ratings yet.</p>
-        )}
-      </section>
-
-      {!hasReviews && (
-        <section className="mt-10 rounded-xl border border-line bg-card p-6">
-          <p className="text-[15px]">No reviews yet.</p>
-          <p className="mt-1 text-sm text-muted">
-            Be the first to say how it went.
-          </p>
-          <Link
-            href={`/review/${id}`}
-            className="mt-6 inline-block rounded-lg border border-ink/15 px-5 py-2.5 text-sm transition-colors hover:border-ink/40"
-          >
-            Write the first review
-          </Link>
+      {hasReviews && (
+        <section className="mt-10 flex items-baseline gap-4">
+          {/*
+            This is the line. The average is printed exactly as the API sent it.
+            There is no addition, division, rounding or sorting in this file.
+          */}
+          <span className="text-[4.5rem] font-semibold leading-[0.8] tracking-[-0.045em] tabular-nums sm:text-[5.5rem]">
+            {restaurant.averageRating}
+          </span>
+          <span className="pb-1 text-sm text-muted">
+            {restaurant.totalReviews}{" "}
+            {restaurant.totalReviews === 1 ? "review" : "reviews"}
+          </span>
         </section>
       )}
 
       {restaurant.latestReview && (
-        <section className="mt-10 rounded-xl border border-line bg-card p-6">
-          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
-            Latest review
-          </p>
-          <div className="mt-4">
-            <ReviewBody review={restaurant.latestReview} />
+        <section className="mt-10 overflow-hidden rounded-xl border border-line bg-card">
+          <div className="flex items-center justify-between border-b border-line px-5 py-3">
+            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-accent">
+              Latest review
+            </p>
+            <span className="text-xs text-muted">
+              {formatDate(restaurant.latestReview.createdAt)}
+            </span>
+          </div>
+          <div className="px-5 py-5">
+            <Stars rating={restaurant.latestReview.rating} />
+            <p className="mt-3 text-[17px] leading-[1.6]">
+              {restaurant.latestReview.comment}
+            </p>
           </div>
         </section>
       )}
 
       {restaurant.reviews.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-[11px] font-medium uppercase tracking-[0.14em] text-muted">
+        <section className="mt-12">
+          <h2 className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted">
             Earlier reviews
           </h2>
-          <ul className="mt-4 divide-y divide-line border-t border-line">
+          <ul className="mt-2 divide-y divide-line">
             {restaurant.reviews.map((review) => (
-              <li key={review.id} className="py-5">
-                <ReviewBody review={review} />
+              <li key={review.id} className="py-6">
+                <div className="flex items-center justify-between gap-4">
+                  <Stars rating={review.rating} size="h-3 w-3" />
+                  <span className="text-xs text-muted">
+                    {formatDate(review.createdAt)}
+                  </span>
+                </div>
+                <p className="mt-2.5 text-[15px] leading-[1.65]">
+                  {review.comment}
+                </p>
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {!hasReviews && (
+        <section className="mt-10 rounded-xl border border-dashed border-line bg-card px-6 py-10 text-center">
+          <p className="text-[17px] font-medium">No reviews yet.</p>
+          <p className="mx-auto mt-2 max-w-[32ch] text-sm leading-relaxed text-muted">
+            Be the first to say how it went.
+          </p>
+          <div className="mt-7">
+            <Link
+              href={`/review/${id}`}
+              className="inline-flex h-11 items-center rounded-lg bg-ink px-5 text-sm font-medium text-paper transition-colors hover:bg-[#26261f]"
+            >
+              Write the first review
+            </Link>
+          </div>
         </section>
       )}
 
@@ -170,7 +183,7 @@ export default function RestaurantPage() {
         <div className="mt-12">
           <Link
             href={`/review/${id}`}
-            className="inline-block rounded-lg border border-ink/15 px-5 py-2.5 text-sm transition-colors hover:border-ink/40"
+            className="inline-flex h-11 items-center rounded-lg border border-ink/15 px-5 text-sm font-medium transition-colors hover:border-ink/30 hover:bg-ink/[0.03]"
           >
             Write a review
           </Link>
